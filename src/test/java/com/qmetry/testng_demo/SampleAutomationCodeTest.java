@@ -24,7 +24,7 @@ public class SampleAutomationCodeTest {
         
         try {
             String pageTitle = SampleAutomationCode.navigateToGoogle();
-            assertEquals(pageTitle, "QMetry Test Management Tool for Agile Testing");
+            assertEquals(pageTitle, "Best Test Management and Automated Testing Tools|QMetry");
         } catch (InterruptedException e) {
             Reporter.log(e.getStackTrace().toString());
         }
