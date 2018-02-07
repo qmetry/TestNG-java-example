@@ -1,19 +1,90 @@
-# TestNG-java-example
+# Testng-maven-example
+This is sample Testng + maven  project in Java. It shows how to upload test result file on JIRA instance using [QMetry for JIRA - Test Management](https://marketplace.atlassian.com/plugins/com.infostretch.QmetryTestManager/cloud/overview).  
 
-This is sample Test NG + selenium project in Java. It shows how to upload test result file on JIRA instance using [QMetry for JIRA - Test Management](https://marketplace.atlassian.com/plugins/com.infostretch.QmetryTestManager/cloud/overview).  
-
-### Install chromedriver  
-
-You need to install [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) to run test on Google Chrome. Then set chromedriver path in `src/main/java/com/qmetry/SampleAutomationCode.java`.
 
 ### Run test
 
-First you need to provide few details in properties file. `qtm4j.properties`. 
+please update these details in `pom.xml` file. 
 
-1. API Key - You can get this value by logging into your JIRA instance. Then click on QMetry Menu -> Automation API page. 
-2. Base URL - QMetry Automation API URL. This information is also available in Automation API page. 
-3. Username/password - This information is required for server/On premise version. (For cloud, you can skip this)
-4. JIRA Hosting type - Put `C` for Cloud and `S` for on premise/ Server. 
+<div id="automationFramework" class="border-top m-t-10 p-t-10"><div class="m-t-sm">
+    <label class="bold">Step 1: Add the following to the &lt;build&gt; -&gt; &lt;plugins&gt; block in your
+				pom.xml:</label> 
+    <pre class="code-block"><code>&lt;build&gt;</code>
+	<code>&lt;plugins&gt;</code>
+		<code>&lt;plugin&gt;</code>
+			<code>&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</code>
+			<code>&lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;</code>
+			<code>&lt;version&gt;2.20&lt;/version&gt;</code>
+			<code>&lt;configuration&gt;</code>
+			    <code>&lt;properties&gt;</code>
+					<code>&lt;property&gt;</code>
+						<code>&lt;name&gt;listener&lt;/name&gt;</code>
+						<code>&lt;value&gt;com.qmetry.automation.TestngResultUploader&lt;/value&gt;</code>
+					<code>&lt;/property&gt;</code>
+				<code>&lt;/properties&gt;</code>
+			<code>&lt;/configuration&gt;</code>
+		<code>&lt;/plugin&gt;</code>
+	<code>&lt;/plugins&gt;</code>
+<code>&lt;/build&gt;</code>
+	</pre>   
+    
+</div>
+
+
+
+<div class="m-t-sm">
+    <label class="bold">Step 2: Add the following to the &lt;dependencies&gt; block in pom.xml:</label>
+    <pre class="code-block"><code>&lt;dependencies&gt;</code>
+    <code>&lt;dependency&gt;</code>
+        <code>&lt;groupId&gt;com.qmetry&lt;/groupId&gt;</code>
+        <code>&lt;artifactId&gt;automation&lt;/artifactId&gt;</code>
+        <code>&lt;version&gt;1.0.0&lt;/version&gt;</code>
+    <code>&lt;/dependency&gt;</code>
+<code>&lt;/dependencies&gt;</code>
+	</pre>
+</div>
+
+<div class="m-t-sm">
+    <label class="bold">Step 3: Add the following to the &lt;repositories&gt; block in pom.xml like:</label>
+    <pre class="code-block"><code>&lt;repositories&gt;</code>
+	<code>&lt;repository&gt;</code>
+		<code>&lt;id&gt;qmetrytestmanager-mvn-repo&lt;/id&gt;</code>
+		<code>&lt;name&gt;QMetry Test Manager Maven Repository&lt;/name&gt;</code>
+		<code>&lt;url&gt;https://raw.github.com/qmetry/qtm4j-maven-uploader/mvn-repo/&lt;/url&gt;</code>
+	<code>&lt;/repository&gt;</code>
+<code>&lt;/repositories&gt;</code>
+	</pre>
+</div>
+<div class="m-t-sm">
+    <label class="bold">Step 4: Add qmetry.properties file to root directory of your project</label>
+</div>
+<div class="m-t-sm">
+	<label>Configure below properties:</label>
+    <pre class="select-block code-block"><code>automation.qmetry.enabled = true</code>
+<code>automation.qmetry.url = https://importresults.qmetry.com/QmetryWisdom/importresults-qtm4j</code>
+<code>automation.qmetry.apikey = aed606a7609feca7c4ac801677b7f825249d7358df9b72c3a2b9a91b046efb8e</code>
+<code>automation.qmetry.filepath = /target/surefire-reports/testng-results.xml</code>
+<code>automation.qmetry.testrunname = Test Run</code>
+<code>automation.qmetry.labels = lbl1,lbl2</code>
+<code>automation.qmetry.components = com1,com2</code>
+<code>automation.qmetry.version = v1,v2</code>
+<code>automation.qmetry.sprint = sprint1</code>
+<code>automation.qmetry.platform = chrome</code>
+<code>automation.qmetry.comment = this is test run comment</code>
+<code>automation.qmetry.testrunkey = </code>
+<code>automation.qmetry.testassethierarchy = TestCase-TestStep</code>
+<code>automation.qmetry.jirafields = </code>
+<code>automation.qmetry.debug = true</code>
+	</pre>
+</div>
+
+<div class="m-t-sm">
+    <label>if you are using on premise JIRA, then configure below properties as well:</label>
+    <pre class="select-block code-block"><code>automation.qmetry.username = admin</code>
+<code>automation.qmetry.password = admin</code>	
+	</pre>
+    <label>Once the file is configured, the automation test results will get uploaded automatically whenever the user executes the automation project (e.g. using 'mvn test').</label>
+</div></div>
 
 After providing these details, you are ready to start test.
 
@@ -21,6 +92,6 @@ After providing these details, you are ready to start test.
 mvn test
 ```
 
-It will generate `testng-result.xml` test result file. 
+It will generate `surefile-reports`. 
 
-Addionally, right after test completion, test result file will be uploaded on your JIRA instance. 
+Addionally, right after test completion, test result file will be uploaded on your JIRA instance if you have provided correct details in properties file. 
